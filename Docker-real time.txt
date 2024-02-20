@@ -1,0 +1,96 @@
+ apt update
+    2  apt upgrade
+    3  docker --version
+    4  apt-get docker.io
+    5* apt
+    6  apt-get install docker.io
+    7  docker --version
+    8  systemctl enable docker
+    9  systemctl start docker
+   10  systemctl status docker
+   11  docker info
+   12  docker images
+   13  docker ps
+   14  docker ps -a
+   15  docker search centos
+   16  docker search ubuntu
+   17  docker pull ubantu
+   18  docker pull ubuntu
+   19  docker images
+   20  ls
+   21  docker ps
+   22  docker run -it ubuntu
+   23  docker attach Ubuntu
+   24  docker start ubantu Ubuntu
+   25  docker ps -a
+   26  docker start ubuntu
+   27  docker start 6b74efdfd0eb
+   28  docker attach 6b74efdfd0eb
+   29  docker ps -a
+   30  docker ps
+   31  docker stop 6b74efdfd0eb
+   32  docker ps
+   33  docker run -it centos
+   34  docker ps
+   35  docker images
+   36  docker run -itd 5d0da3dc9764
+   37  docker ps
+   38  docker ps -a
+   39  docker pull centos:centos7
+   40  docker images
+   41  docker run -it centos:centos7
+   42  docker ps
+   43  docker ps -aq
+   44  docker ps a
+   45  docker ps -a
+   46  docker rm 8e486f54d9e5
+   47  docker stop f04a6e8271d4
+   48  docker stop 8e486f54d9e5
+   49  docker ps
+   50  docker ps -a
+   51  docker rm f04a6e8271d4 8e486f54d9e5
+   52  docker ps -a
+   53  docker ps
+   54  docker rm -f de2af74e48bf
+   55  docker ps
+   56  docker ps -a
+   57  docker run -it 6b74efdfd0eb
+   58  docker images
+   59  docker run -it centos
+   60  docker run -itd centos:centos7
+   61  docker ps -a
+   62  docker run -f $(docker ps -aq)
+   63  docker rm -f $(docker ps -aq)
+   64  docker ps -a
+   65  docker images
+   66  docker rmi centos
+   67  docker images
+   68  docker run -it centos:centos7
+   69  docker ps
+   70  docker attach f7b414bb4575
+   71  docker ps
+   72  docker commit f7b414bb4575
+   73  docker images
+   74  docker tag b3707d5f49c7 "eswar"
+   75  docker images
+   76  docker tag b3707d5f49c7 "eswar:1"
+   77  docker images
+   78  history
+
+
+
+
+
+ 1  apt update
+    2  apt install git
+    3  yum install git
+    4  git config --list
+    5  git config --global --list
+    6  git config --global user.name "Eswar12345678"
+    7  git config --global user.email "marellaeswarprasad8888@gmail.com"
+    8  git config --list
+    9  git clone https://github.com/Eswar12345678/onlinebookstore123.git
+   10  ls
+   11  docker ps
+   12  ls
+   13  history

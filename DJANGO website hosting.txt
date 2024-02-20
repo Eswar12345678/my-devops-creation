@@ -1,0 +1,36 @@
+(EC2- Custom TCP --8000---anywhere-IPV4 save rule) 
+ python3 --version 
+    2  sudo apt update
+    3  sudo apt upgrade
+    4  sudo apt install python3-pip
+    6  pip install virtualenv
+    8  sudo apt install python3-venv
+    9  python3 -m venv env
+   10  ls
+   11  cd env
+   12  ls
+   13  cd bin
+   14  ls
+   15  source activate
+   16  cd ../../
+   23  pip install django
+   24  django-admin --version
+   25 git clone https://github.com/smahesh29/Django-WebApp.git
+   26cd django(that project)
+   python manage.py makemigrations
+   pip install django-crispy-forms
+   pip install easy-pil
+   cd blog
+   cd templates
+   cd blog
+   vim base.html(remove 1st line files)
+   cd ../../../
+   cd django
+   ls
+   vim settings.py ( you need to give allow ['*'] give or give ip )
+   cd ..      
+   python manage.py makemigrations
+   python manage.py migrate
+   python manage.py runserver 0.0.0.0:8000
+ 
+(Take that link and you need to change 0000to IP)

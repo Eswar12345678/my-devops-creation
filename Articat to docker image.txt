@@ -1,0 +1,62 @@
+1) install jenkins
+2) install maven
+3) install docker
+4) another server install nexus
+5) github onlinebookstore-->create new file-->Dockerfile
+FROM tomcat/tomcat01
+COPY target/onlinebookstore.war /usr/local/tomcat/webapps/onlinebookstore.war
+6) NEXUS-->settings symbal-->repositories-->create repositoty-->select docker(hosted)-->name(marellaeswar)-->tick HTTP(8094) or you can give any number-->tick Enable Docker V1 API-->create repository--left side Realms--select Doker Bearer token-->SAVE
+7)jenkins pipeline----
+
+pipeline {
+    agent any
+
+    stages {
+        stage('git clone') {
+            steps {
+                git 'https://github.com/Eswar12345678/onlinebookstore.git'
+            }
+        }
+        stage('code build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('convert the artifact') {
+            steps {
+                sh 'docker build -t 13.232.46.251:8094/marellaeswar .'
+            }
+        }
+        stage('nexus credentials') {
+            steps {
+                sh 'docker login -u admin -p eswar123 13.232.46.251:8094'
+            }
+        }
+        stage('docker image pushes to nexus') {
+            steps {
+                sh 'docker push 13.232.46.251:8094/marellaeswar'
+            }
+        }
+    }
+}
+----------------------------------------------------
+-->step by step cheyali
+
+stage('convert the artifact') 
+sh 'docker build -t marellaeswar .'
+edhi evvali last lo kindhadhi add cheyali pina edit cheyali---
+sh 'docker build -t 13.232.46.251:8094/marellaeswar .'
+--->8094 anedhi nexus repository port adhi
+
+--------IMP---------------
+1)jenkins server
+  chmod 666 /var/run/docker.sock
+2)cd /etc/docker
+3) vi daemon.json
+{
+        "insecure-registries" : ["13.201.44.3:8099"]
+}
+:eq!
+--indhulo nexus ip and nexus repository port evvali
+4) systemctl restart docker
+

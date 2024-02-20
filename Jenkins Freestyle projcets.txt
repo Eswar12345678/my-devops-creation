@@ -1,0 +1,26 @@
+(1) (TOMCAT)FREE STYLE PROJECT FOR JENKINS
+--------------------------------------
+-install maven in jenkins server
+-manage jenkins-->deploy to container plugin install
+-jenkins server-->whereis maven(copy the path)
+-manage jenkins-tools-add maven(name=maven,,path=/usr/share/maven)
+-create freestyle project-->source code management-git-GithubURL
+-BUILDSTEPS-->Invoke top-level maven targets-->goals-->clean install
+-POST BUILD ACTIONS-->select deploywar/ear to a container-->WAR/EAR files(**/*.war)-->context path(eswar999.war)-->add container-->select tomcat9-->crediantials-add->jenkins-->tomcat username,tomcat passward,discription-->ADD--->Tomcat Url---->SAVE-->BUILDNOW
+-->GO TO TOMCAT REFRESH THE PAGE eswar999.war vuntadhi
+----------------------------------------------------
+
+(2)(NEXUS) FREE STYLE PROJECT FOR JENKINS:
+------------------------------------------
+
+-install maven in jenkins server
+-manage jenkins-->nexus artifact uploader plugin install
+-jenkins server-->whereis maven(copy the path)
+-manage jenkins-tools-add maven(name=maven,,path=/usr/share/maven)
+-create freestyle project-->source code management-git-GithubURL
+->BUILDSTEPS-->Invoke top-level maven targets-->goals-->clean install
+-->add again build steps
+-select nexus artifact uploader--> nexus version(NEXUs3)-->protocal(HTTP)-->nexus url(ip:8081)
+-->credentials-->add-->jenkins-->nexus username(admin)->passward(admin123)-->discription(nexus credentials)-->add
+-*-->Groupid(pom.xmlfile lo vuntayi)-->version(pom.xml)-->repository(maven-snapshots(nexus repository name give))-->ARTIFACTS ADD--artifactid(pom.xml)-->type(war)-->file(target/onlinebookstore.war)
+-->SAVE-->BUILD NOW-->go to nexus youcan see maven snapshorts

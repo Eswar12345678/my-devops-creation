@@ -1,0 +1,89 @@
+ec2-redhat or amazon linux alltcp 9000
+----->REDHAT 
+1  yum install java-11 -y
+2  yum install wget -y
+3  yum install unzip -y
+4  cd /opt
+5  wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-7.6.zip 
+6  unzip sonarqube-7.6.zip
+7  useradd sonar
+8  visudo (root kindha add cheyyali)
+9  sonar ALL NOPASSWD:ALL  
+10  sudo chown -R sonar:sonar /opt/sonarqube-7.6
+11  sudo chmod -R 775 /opt/sonarqube-7.6
+12  su - sonar
+13  cd /opt/sonarqube-7.6/bin/linux-x86-64
+14  sh sonar.sh start
+
+ip:9000
+login-name:admin
+pasward:admin
+new craete project-->projectket(eswar)-->setup-->genarate-->
+a013ccb1f8e926140edf75269f7163adef0df52d(copy)-->continue-->click on java--> click on maven -->kindha code copy
+(mvn sonar:sonar \
+  -Dsonar.projectKey=prasad \
+  -Dsonar.host.url=http://15.206.100.112:9000 \
+  -Dsonar.login=a013ccb1f8e926140edf75269f7163adef0df52d)
+
+jenkins-->manage jenkins-->plugins-->avalible plugins-->
+SonarQube Scanner for Jenkins -->install
+manage jenkins-->system-->Environment variable (click)
+add sonarQube-->name (sonarqube)-->serverURL(sonar entire urlhttp://15.206.100.112:9000/)-->save
+reopen managejenkins-->system-->in sonar Server authentication token-->add--jenkins--add credentials-->
+kind-->secret text-->secret(a013ccb1f8e926140edf75269f7163adef0df52d)sonar create chesinappu vunindhi nga adhi
+id--eswar
+description--sonar crediantials--->ADD---SAVE
+-------------------------------------------
+PIPELINE
+you can add one stage after code bulidinding
+pipeline-->Sonar lo copy chesam ga java-mavendhi
+mvn sonar:sonar \
+  -Dsonar.projectKey=prasad \
+  -Dsonar.host.url=http://15.206.100.112:9000 \
+  -Dsonar.login=a013ccb1f8e926140edf75269f7163adef0df52d
+------------pipeline------
+
+pipeline {
+    agent any
+
+    stages {
+        stage('git clone') {
+            steps {
+                git 'https://github.com/Eswar12345678/onlinebookstore.git'
+            }
+        }
+        stage('code buildinng') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('sonar') {
+            steps {
+                sh 'mvn sonar:sonar \
+                -Dsonar.projectKey=eswar \
+                -Dsonar.host.url=http://15.206.100.112:9000 \
+                -Dsonar.login=640b208ac8c650f8b0e26e69b3a5b4e9f8e12569'
+            }
+        }
+        stage('convert the artifact') {
+            steps {
+                sh 'docker build -t 13.201.44.3:8099/eswarmarella .'
+            }
+        }
+        stage('nexus cred') {
+            steps {
+                sh 'docker login -u admin -p eswar123 13.201.44.3:8099'
+            }
+        }
+        stage('docker img pushes to nexus') {
+            steps {
+                sh 'docker push 13.201.44.3:8099/eswarmarella'
+            }
+        }
+    }
+}
+
+kindha antha avaram ledhu stage sonar varaku kuda chalu
+
+
+

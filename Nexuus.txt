@@ -1,0 +1,22 @@
+(EC2-T2-MEDIUM-2CPU----ALL TRAFIC--ANYWHERE IPV4)
+
+wget https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u342-b07/openlogic-openjdk-8u342-b07-linux-x64-el.rpm
+    3  ls
+    5  yum  install openlogic-openjdk-8u342-b07-linux-x64-el.rpm 
+    7  java -version
+    8  wget https://download.sonatype.com/nexus/3/nexus-3.64.0-04-unix.tar.gz
+    9  ls
+   11  tar -xvf nexus-3.64.0-04-unix.tar.gz 
+   12  ls
+   13  mv nexus-3.64.0-04 nexus
+   24  useradd nexus
+   25  passwd nexus ----(its not mandatory)
+   26  ll
+   27  chown -R nexus:nexus nexus
+   28  chown -R nexus:nexus sonatype-work
+   30  ll
+   32  cd nexus/
+   33  ls
+   34  cd bin
+   38  vim nexus.rc (you can give name "nexus")
+   39  sh nexus start

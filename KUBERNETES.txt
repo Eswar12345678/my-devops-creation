@@ -1,0 +1,9 @@
+K8S VERSION--v1.29
+----------KUBERNETES------------
+Kubernetes, also known as K8s, is an open-source system for automating deployment, scaling, and management of containerized applications.
+----Kubernetes cluster-----------
+A Kubernetes cluster consists of a set of worker machines, called nodes, that run containerized applications. Every cluster has at least one worker node.
+
+POD:
+A Pod is similar to a set of containers with shared namespaces and shared filesystem volumes.
+

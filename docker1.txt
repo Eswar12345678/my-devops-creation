@@ -1,0 +1,76 @@
+    1  apt update
+    2  apt upgrade
+    3  docker --version
+    6  apt-get install docker.io
+    7  docker --version
+    8  systemctl enable docker
+    9  systemctl start docker
+   10  systemctl status docker
+   11  docker info
+   12  docker images
+   13  docker ps
+   14  docker ps -a
+   16  docker search ubuntu
+   18  docker pull ubuntu
+   22  docker run -it ubuntu
+   27  docker start 6b74efdfd0eb(cid)
+   28  docker attach 6b74efdfd0eb(cid)
+               (or)
+   28  docker exec -it ba0f1187c204(cid) /bin/bash (webserver ki attach ayyeki)
+   31  docker stop 6b74efdfd0eb
+   39  docker pull centos:centos7 (centos version download)
+   46  docker rm 8e486f54d9e5(cid)--- (container delete command)
+   46  docker rm -f 8e486f54d9e5(cid)--(running container delete )
+   60  docker run -itd ubantu (-d means detached mode)
+   62  docker rm -f $(docker ps -aq) --->(all containers with running also delete)
+   66  docker rmi centos (image delete)
+   66  docker rmi -f imgageid (image with container delete)
+(container ni image create)
+   67  docker ps
+   72  docker commit f7b414bb4575(cid)
+   73  docker images
+   74  docker tag b3707d5f49c7(imgid) "eswar" --(img ki name create cheyyadam) 
+   75  docker images
+   76  docker tag b3707d5f49c7(imgid) "eswar:1" --(image ki tag create cheyadam)
+   97  docker rm -f $(docker ps -aq) -->(all containers delete)
+
+------------------TOMCAT IN WEBSERVER-------------------------
+  134  docker pull tomcat/tomcat01
+  135  docker images
+  136  docker run -it -p 8081:8080 52dacec68f06(Imgid)
+  139  docker start ba0f1187c204(cid)
+  144  docker exec -it ba0f1187c204 /bin/bash
+in container-->tomcatuser.xml-->last lo add
+-->
+  <role rolename="manager-gui"/>
+  <user username="tomcat" password="eswar123" roles="manager-gui, manager-script, manager-status, manager-jmx"/>
+</tomcat-users>
+
+---->context.xml--allow(.*)
+  155 cd bin/
+  155 ./shutdown.sh
+  156 ./startup.sh
+(publicip:8081 its works)
+
+ee tomcat ni mana dockerhub loki push tomcat cintainer ni image ga create cheyadam
+ 72  docker commit f7b414bb4575(cid)
+ 73  docker images
+ 74  docker tag b3707d5f49c7(imgid) "eswar909/eswar" --(img ki name create cheyyadam)
+(dockerhub lo repo name image name same vundali)
+ 75  docker login (username,passward)
+ 76  docker push eswar909/eswar
+ 
+-----------IN CONTAINER-----------------
+ 1  apt update
+    2  apt install git
+    3  yum install git
+    4  git config --list
+    5  git config --global --list
+    6  git config --global user.name "Eswar12345678"
+    7  git config --global user.email "marellaeswarprasad8888@gmail.com"
+    8  git config --list
+    9  git clone https://github.com/Eswar12345678/onlinebookstore123.git
+
+clone is not working create tokrn
+settings->developers settings->persanal acees token->token(classic)->token create after that url take->git clone url give 
+

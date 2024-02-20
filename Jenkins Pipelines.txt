@@ -1,0 +1,106 @@
+(1)-->PIPELINE FOR TOMCAT--->
+
+1) Install jenkins in server(install maven)
+2) Install Tomcat
+3) managej jenkins->deploy to container plugin install
+4) create pipe line-->select hello world(add next stages)
+5) pipeline syntax-->sample steps-->select-->deploy:Deploy war/ear to a container-->WAR/EAR files(**/*.war)-->Context path(eswar909.war)
+-->add container-->select tomcat9-->add(jenkins)-username(tomcat)-->
+passward(tomcat123)-->discription(tomcat credentials)-->add-->Tomcat url-->Generate pipeline script(you can copy in CODE DEPLOY)
+
+---------->TOMCAT PIPELINE<-------------
+
+pipeline {
+    agent any
+
+    stages {
+        stage('code cloning') {
+            steps {
+                git 'https://github.com/guna1234567/Fresh.git'
+            }
+        }
+        stage('code building') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('code deploying') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: '54530047-2586-4cc9-8db3-eb60d4d15783', path: '', url: 'http://13.201.95.29:8080/')], contextPath: 'eswar123.war', war: '/*.war'
+            }
+        }
+    }
+}
+
+-->Go to tomcat refresh the tomcat eswar909.war on tomcat
+
+-----------------------------------------------------------------
+
+(2)--------NEXUS PIPELINE---------
+
+1) nexus install
+2) manage jenkins-->nexus artifact uploader pulgin install
+3) create pipeline-->select hellow world program
+4) pipeline syntax-->sample steps(select nexus artifact uploader)
+-->nexus version(NEXUs3)-->protocal(HTTP)-->nexus url(ip:8081)
+-->credentials-->add-->jenkins-->nexus username(admin)->passward(admin123)-->discription(nexus credentials)-->add
+-*-->Groupid(pom.xmlfile lo vuntayi)-->version(pom.xml)-->repository(maven-snapshots(nexus repository name give))-->ARTIFACTS ADD--artifactid(pom.xml)-->type(war)-->file(target/onlinebookstore.war)-->ADD
+GENERATE PIPELINE SCRIPT--copy
+
+pipeline {
+    agent any
+
+    stages {
+        stage('code cloning') {
+            steps {
+                git 'https://github.com/guna1234567/Fresh.git'
+            }
+        }
+        stage('code building') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('code deploying') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'onlinebookstore', classifier: '', file: 'target/onlinebookstore.war', type: 'war']], credentialsId: 'aa022ff7-c646-4e6a-ba0f-b738424d8880', groupId: 'onlinebookstore', nexusUrl: '13.235.18.31:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-snapshots', version: '0.0.1-SNAPSHOT'
+
+            }
+        }
+    }
+}
+
+GO to nexus check maven-shanpshots
+---------------------------------------------------------------
+
+(3)TOMCAT AND NEXUS IN ONE PIPELINE:
+
+pipeline {
+    agent any
+
+    stages {
+        stage('code cloning') {
+            steps {
+                git 'https://github.com/shashirajraja/onlinebookstore.git'
+            }
+        }
+        stage('code building') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('code deploying') {
+            steps {
+                nexusArtifactUploader artifacts: [[artifactId: 'onlinebookstore', classifier: '', file: 'target/onlinebookstore.war', type: 'war']], credentialsId: 'aa022ff7-c646-4e6a-ba0f-b738424d8880', groupId: 'onlinebookstore', nexusUrl: '13.235.18.31:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'maven-snapshots', version: '0.0.1-SNAPSHOT'
+            }
+        }
+        stage('deploy tomcat') {
+            steps {
+                deploy adapters: [tomcat9(credentialsId: 'f8559374-b3e2-4b33-a9a8-2fb9a6a75b78', path: '', url: 'http://13.201.45.50:8080')], contextPath: 'developtrees.war', war: '/*.war'
+            }
+        }
+    }
+}
+
+
+

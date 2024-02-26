@@ -1,0 +1,254 @@
+Create an EC2 Linux server with 2 CPUs and 4GB ram.
+enable all tcp ports numbers for this server.
+K8S-Master
+===========
+
+sudo su
+
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+--># Set SELinux in permissive mode (effectively disabling it)
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+sudo systemctl enable --now kubelet
+
+
+Install CRI-O
+==============
+
+export VERSION=1.21
+sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/CentOS_8/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
+sudo yum install cri-o -y
+
+Enable and start cri-o service
+------------------------------
+
+sudo systemctl enable --now cri-o
+sudo systemctl start cri-o
+
+Installing Docker EC2 Linux
+============================
+sudo su
+
+sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+
+yum repolist
+
+sudo dnf install docker-io --nobest -y
+
+docker --version
+
+systemctl start docker
+
+systemctl enable docker
+
+rm -rf /var/run/containerd/containerd.sock
+
+kubeadm init  (only on master)
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl get nodes 
+--------------------------------------------------------
+
+(NODE SERVER1)*******NODE SERVER CREATION:-
+SERVER1:
+--------------->
+sudo su
+
+cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
+[kubernetes]
+name=Kubernetes
+baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-\$basearch
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+exclude=kubelet kubeadm kubectl
+EOF
+
+--># Set SELinux in permissive mode (effectively disabling it)
+sudo setenforce 0
+sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+
+sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+
+sudo systemctl enable --now kubelet
+
+
+Install CRI-O
+==============
+
+export VERSION=1.21
+sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable.repo https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/CentOS_8/devel:kubic:libcontainers:stable.repo
+sudo curl -L -o /etc/yum.repos.d/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$VERSION/CentOS_8/devel:kubic:libcontainers:stable:cri-o:$VERSION.repo
+sudo yum install cri-o -y
+
+Enable and start cri-o service
+------------------------------
+
+sudo systemctl enable --now cri-o
+sudo systemctl start cri-o
+sudo su
+sudo dnf config-manager --add-repo=https://download.docker.com/linux/centos/docker-ce.repo
+yum repolist
+
+sudo dnf install docker-io --nobest -y
+
+docker --version
+
+systemctl start docker
+
+systemctl enable docker
+
+rm -rf /var/run/containerd/containerd.sock
+
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+kubectl get nodes 
+
+AFTER go to master server---->
+kubeadm token create --print-join-command
+(token vastadhi adhi copy and paste in node server directly)
+example:
+(kubeadm join 172.31.3.150:6443 --token e3w5w5.hrv2qnaqeheyufpq --discovery-token-ca-cert-hash sha256:ab44f203b3d89f58534601322555b7ecd414ae6076b0f690c2481bfcf1875369)
+-------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------
+
+JENKINS:
+manage plugins-->available plugins--->kubernetes(anni select chesi install cheyali)
+in master server:
+cd
+cat .kube/congig
+copy and open note pad save
+-->manage jenkins---> credetials-->Stores scoped to Jenkins-->system-click on global-->add credentials-->kind(secrete file)-->choose file(upload notepad file)--discription(k8s)-->craete
+
+pipeline sysntax-->git-Git-->github srediatls
+
+last stage :
+-----------
+pipeline syntax-->withKubeConfig:configure kubernetes CLI(kubectl) select-->credentials->add jenkins-->kind(secrete file)-->upload file-->discription-->k8s-->add-->Generate pipeline copy paste in last stahe--->save and build now
+
+
+-----------PIPELINE FOR K8S DEPLOYMENT-------------
+pipeline {
+    agent any
+
+    stages {
+        stage('clone') {
+            steps {
+                git branch: 'main', credentialsId: '456ec4cd-0e04-4295-9b94-2445419df903', url: 'https://github.com/guna1234567/Spring_Boot-Mango-Docker_Application.git'
+            }
+        }
+        stage('build') {
+            steps {
+                sh 'mvn clean install'
+            }
+        }
+        stage('sonar build') {
+            steps {
+                sh 'mvn sonar:sonar \
+  -Dsonar.projectKey=eswar123 \
+  -Dsonar.host.url=http://35.154.28.50:9000 \
+  -Dsonar.login=46bd2951b2e46d410f2c64d1354a8ec6b116c18a'
+            }
+        }
+        stage('creating artifacts') {
+            steps {
+                sh 'docker build -t 15.207.116.173:8094/marellaeswar .'
+            }
+        }
+        stage('nexus cred') {
+            steps {
+                sh 'docker login -u admin -p admin 15.207.116.173:8094'
+            }
+        }
+        stage('deploy to nexus') {
+            steps {
+                sh 'docker push 15.207.116.173:8094/marellaeswar'
+            }
+        }
+        stage('deploy docker image') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: '9eccff13-47d6-407a-aba8-b22edcc892f3', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                   sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+                   sh 'chmod u+x ./kubectl'  
+                   sh './kubectl get pods'
+                   sh './kubectl apply -f springBootMongo.yml'
+                }
+            }
+        }
+    }
+}
+-----------------------------------------
+master server
+kubectl get pods
+kubectl get svc
+(akkkada pot number chupistundhi)like 31009 ala
+example:--  13.233.156.47:31591
+node server:
+ip:akkadaport ivvali
+-----------------------------------
+that pipeline credentials id (k8s) this id credentials discription
+------------------------------------------------------------------------
+---------------------------------------------------
+--------------------------------------------------------
+
+ANTOHER PIPELINE (Another pipeline)
+---------------->
+
+pipeline {
+    agent any
+
+    stages {
+        stage('code cloning') {
+            steps {
+                git branch: 'main', credentialsId: '7382b297-fa9e-47c9-94fc-373c838da053', url: 'https://github.com/guna1234567/Spring_Boot-Mango-Docker_Application.git'
+            }
+        }
+        stage('code building') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('code analysing') {
+            steps {
+                sh 'mvn sonar:sonar \
+  -Dsonar.projectKey=k8s-project \
+  -Dsonar.host.url=http://13.201.28.154:9000 \
+  -Dsonar.login=51414aa66a69f3bbe0560211a1b217d6033d5b90'
+            }
+        }
+        stage('create docker image') {
+            steps {
+                sh 'docker build -t dockerhandson/spring-boot-mango .'
+            }
+        }
+        stage('deploy docker image') {
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: '9eccff13-47d6-407a-aba8-b22edcc892f3', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                   sh 'curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.20.5/bin/linux/amd64/kubectl"'
+                   sh 'chmod u+x ./kubectl'  
+                   sh './kubectl get pods'
+                   sh './kubectl apply -f springBootMongo.yml'
+                }
+            }
+        }
+    }
+}
+
